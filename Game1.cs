@@ -26,6 +26,7 @@ namespace Summative_Assignment_1_5_PHILIP_GRAHAM
             carsSong.Play();
 
             base.Initialize();
+
         }
 
         protected override void LoadContent()
