@@ -14,7 +14,7 @@ namespace Summative_Assignment_1_5_PHILIP_GRAHAM
         SoundEffect carsSong;
         SoundEffectInstance carSongInstance;
         SoundEffect explosion;
-        SoundEffectInstance explosionInstance
+        SoundEffectInstance explosionInstance;
 
         bool  explosionEffect= false;
         SpriteFont titleFont;
@@ -32,6 +32,12 @@ namespace Summative_Assignment_1_5_PHILIP_GRAHAM
         Rectangle docHudsonExitRect;
         Vector2 towMaterExit;
         Vector2 docHudsonExit;
+        Texture2D endScreenTexture;
+        Texture2D bigRedTexture;
+        SoundEffect crySound;
+        SoundEffectInstance crySoundInstance;
+        float seconds;
+        float startTime;
 
         enum Screen
         {
@@ -74,12 +80,16 @@ namespace Summative_Assignment_1_5_PHILIP_GRAHAM
             carsSong = Content.Load<SoundEffect>("carsSong");
             carSongInstance = carsSong.CreateInstance();
             explosion = Content.Load<SoundEffect>("explosionSound");
+            explosionInstance = explosion.CreateInstance();
 
             titleFont = Content.Load<SpriteFont>("title");
             crashScreenTexture  = Content.Load<Texture2D>("radiatorSprings");
             towMaterTexture = Content.Load<Texture2D>("towMater");
             docHudsonTexture = Content.Load<Texture2D>("docHudson");
-
+            endScreenTexture = Content.Load<Texture2D>("endScreen");
+            bigRedTexture = Content.Load<Texture2D>("bigRed");
+            crySound = Content.Load<SoundEffect>("crySound");
+            crySoundInstance = crySound.CreateInstance();  
 
             // TODO: use this.Content to load your game content here
         }
@@ -91,8 +101,9 @@ namespace Summative_Assignment_1_5_PHILIP_GRAHAM
 
 
             // TODO: Add your update logic here
-            mouseState = Mouse.GetState();           
+            mouseState = Mouse.GetState();
             
+
 
             if (currentScreen == Screen.Intro)
             {
@@ -111,7 +122,7 @@ namespace Summative_Assignment_1_5_PHILIP_GRAHAM
                     carSongInstance.Stop();
 
                 }
-
+                
             }
              if (currentScreen == Screen.Explosion)
             {
@@ -119,12 +130,21 @@ namespace Summative_Assignment_1_5_PHILIP_GRAHAM
                 towMaterExitRect.Y += (int)towMaterExit.Y;
                 if (explosionEffect == false)
                 {
-                    explosion.Play();
-                    explosionEffect = true; 
-                }
-                   
+                    explosionInstance.Play();
+                    
+                    
 
-                
+                }
+
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                    currentScreen = Screen.End;
+                if (currentScreen == Screen.End)
+                {
+                    explosionInstance.Stop();
+                    crySoundInstance.Play();
+                     
+                }
+
 
             }
                 base.Update(gameTime);
@@ -153,6 +173,15 @@ namespace Summative_Assignment_1_5_PHILIP_GRAHAM
                 _spriteBatch.Draw(explosionScreenTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
                 _spriteBatch.Draw(docHudsonTexture,docHudsonExitRect, Color.White);
                 _spriteBatch.Draw(towMaterTexture,towMaterExitRect, Color.White);
+                _spriteBatch.DrawString(titleFont, ("Click to see next Screen"), new Vector2(100, 25), Color.Blue);
+            }
+
+            if (currentScreen == Screen.End)
+            {
+                _spriteBatch.Draw(endScreenTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+                _spriteBatch.Draw(bigRedTexture, new Rectangle(550, 300, 150, 200), Color.White);
+                _spriteBatch.DrawString(titleFont, ("R.I.P Doc man"), new Vector2(100, 25), Color.Blue);
+                
             }
             _spriteBatch.End(); 
 
